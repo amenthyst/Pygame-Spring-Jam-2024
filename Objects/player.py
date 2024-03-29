@@ -11,7 +11,7 @@ class Player(pygame.sprite.Sprite):
                          pygame.K_s: (0, 1),
                          pygame.K_a: (-1, 0),
                          pygame.K_d: (1, 0)}
-        self.friction = 0.85
+        self.friction = 0.845
         self.maxvelocity = 20
         self.acceleration = speed
 
@@ -22,8 +22,7 @@ class Player(pygame.sprite.Sprite):
 
         for vec in (self.controls[k] for k in self.controls if pressed[k]):
 
-            self.velocity += vec
-        self.velocity *= self.acceleration
+            self.velocity += pygame.math.Vector2(vec) * self.acceleration
 
         if self.velocity.magnitude() > self.maxvelocity:
             self.velocity = self.velocity.normalize() * self.maxvelocity
@@ -35,6 +34,8 @@ class Player(pygame.sprite.Sprite):
         self.rect.x += self.velocity[0]
         self.rect.y += self.velocity[1]
 
+    def shoot(self):
+        pass
     def update(self):
         self.move()
 
