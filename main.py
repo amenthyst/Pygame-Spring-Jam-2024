@@ -13,7 +13,7 @@ clock = pygame.time.Clock()
 playersurf = images.renderplayer()
 
 
-playergrp = pygame.sprite.GroupSingle(Player(playersurf, (500,500), 1))
+playergrp = pygame.sprite.GroupSingle(Player(playersurf, (500,500), 1.05))
 
 run = True
 while run:
