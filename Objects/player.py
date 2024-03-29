@@ -18,6 +18,8 @@ class Player(pygame.sprite.Sprite):
         self.bullet = bullet
         self.shoot_force = 10
         self.bulletgrp = bullet_group
+        self.shoot_cooldown = 0.1
+        self.shoot_timer = 0
 
     def get_pos(self) -> pygame.math.Vector2:
         return pygame.math.Vector2(self.rect.x, self.rect.y)
@@ -43,8 +45,12 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.velocity[1]
 
     def shoot(self):
+        self.shoot_timer += 1 / 60 # i rly dont like this but theres no way to get delta yet
         if not pygame.mouse.get_pressed(3)[0]:
             return
+        if self.shoot_timer < self.shoot_cooldown:
+            return
+        self.shoot_timer = 0
         mouse_pos = pygame.mouse.get_pos()
         bullet_dir = pygame.math.Vector2(mouse_pos) - self.get_centre()
         bullet_dir = bullet_dir.normalize()
