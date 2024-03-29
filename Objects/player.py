@@ -16,9 +16,9 @@ class Player(pygame.sprite.Sprite):
         self.acceleration = speed
 
         self.bullet = bullet
-        self.shoot_force = 10
+        self.shoot_force = 20
         self.bulletgrp = bullet_group
-        self.shoot_cooldown = 0.1
+        self.shoot_cooldown = 0.33
         self.shoot_timer = 0
 
     def get_pos(self) -> pygame.math.Vector2:

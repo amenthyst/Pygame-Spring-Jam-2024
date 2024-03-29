@@ -1,6 +1,6 @@
 import pygame
 import images
-import tags
+from tags import Damageable
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, position, velocity):
@@ -14,6 +14,6 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.y += self.velocity.y
 
     def on_collide(self, other):
-        if other is not tags.Damageable:
+        if other is not Damageable:
             return
         other.damage(self.damage)

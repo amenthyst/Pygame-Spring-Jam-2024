@@ -9,7 +9,7 @@ pygame.init()
 
 screen = pygame.display.set_mode((1000,600))
 
-pygame.display.set_caption("Game Jam")
+pygame.display.set_caption("Pygame-Spring-Jam-2024 Jam")
 clock = pygame.time.Clock()
 
 playersurf = images.renderplayer()
