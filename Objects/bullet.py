@@ -1,27 +1,23 @@
 import pygame
 import images
-from tags import Damageable
+from Objects import tags
 
 import math
-
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, position, angle, mousevec, image, speed):
+    def __init__(self, position, velocity):
         super().__init__()
-        self.position = pygame.math.Vector2(position)
-        self.mousevec = pygame.math.Vector2(pygame.mouse.get_pos())
-        self.direction = self.mousevec - self.position
-        self.image = pygame.transform.rotate(image, self.getangle())
-        self.rect = self.image.get_rect(center=position)
-        self.speed = speed
-
-    def getangle(self):
-        return math.degrees(math.atan2(self.direction.x, self.direction.y))
+        self.image = images.renderbullets()[0]
+        self.rect = self.image.get_rect(center=tuple(position))
+        self.velocity = pygame.math.Vector2(velocity)
+        self.damage = 1
+    def update(self, dt):
+        self.move()
 
     def move(self):
-        self.direction = self.direction.normalize() * self.speed
-        self.rect.x += self.direction[0]
-        self.rect.y += self.direction[1]
-
-    def update(self):
-        self.move()
+        self.rect.x += self.velocity.x
+        self.rect.y += self.velocity.y
+    def on_collide(self, other):
+        if not isinstance(other, tags.Damageable):
+            return
+        other.damage(self.damage)
 

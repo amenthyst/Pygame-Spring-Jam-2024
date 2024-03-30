@@ -22,7 +22,10 @@ class Particle(pygame.sprite.Sprite):
         elif self.state == "cold":
             self.color = random.choice(self.coldlist)
 
+
         self.speed = 100
+
+        self.speed = 10
 
         self.direction = pygame.math.Vector2(random.uniform(-1,1), random.uniform(-1,1))
 

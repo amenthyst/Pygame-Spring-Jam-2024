@@ -25,7 +25,10 @@ class Bomb(pygame.sprite.Sprite):
             return
         other.damage(self.damage)
         for _ in range(1,1000):
+
             self.bulletgrp.add(Particle("cold", self.bulletgrp, self.rect.center, 75))
+            self.bulletgrp.add(Particle("cold", self.bulletgrp, self.rect.center, 125))
+
         self.kill()
 
     def attack(self):

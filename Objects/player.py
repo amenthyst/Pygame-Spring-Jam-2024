@@ -1,7 +1,7 @@
 import pygame
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, playersurf, position, speed, bullet, bullet_group):
+    def __init__(self, playersurf, position, speed, bullet, bomb, bullet_group, enemygrp):
         super().__init__()
         self.image = playersurf
         self.rect = self.image.get_rect(center=position)
@@ -17,9 +17,13 @@ class Player(pygame.sprite.Sprite):
         self.bulletlastframe = False
 
         self.bullet = bullet
+        self.bomb = bomb
         self.shoot_force = 20
         self.bulletgrp = bullet_group
+        self.enemygrp = enemygrp
         self.shoot_cooldown = 0.33
+        self.bomb_cooldown = 0.33
+        self.bomb_timer = 0
         self.shoot_timer = 0
 
     def get_pos(self) -> pygame.math.Vector2:
@@ -45,9 +49,8 @@ class Player(pygame.sprite.Sprite):
         self.rect.x += self.velocity[0]
         self.rect.y += self.velocity[1]
 
-    def shoot(self):
-<<<<<<< Updated upstream
-        self.shoot_timer += 1 / 60 # i rly dont like this but theres no way to get delta yet
+    def shoot(self, dt):
+        self.shoot_timer += dt # i rly dont like this but theres no way to get delta yet
         if not pygame.mouse.get_pressed(3)[0]:
             return
         if self.shoot_timer < self.shoot_cooldown:
@@ -58,14 +61,22 @@ class Player(pygame.sprite.Sprite):
         bullet_dir = bullet_dir.normalize()
         bullet = self.bullet(self.get_centre(), bullet_dir * self.shoot_force)
         self.bulletgrp.add(bullet)
-=======
-        pass
->>>>>>> Stashed changes
-
-    def update(self):
+    def shootbomb(self, dt):
+        self.bomb_timer += dt
+        if not pygame.mouse.get_pressed(3)[2]:
+            return
+        if self.bomb_timer < self.bomb_cooldown:
+            return
+        self.bomb_timer = 0
+        mouse_pos = pygame.mouse.get_pos()
+        bombdir = pygame.math.Vector2(mouse_pos) - self.get_centre()
+        bombdir = bombdir.normalize()
+        bomb = self.bomb(self.get_centre(), bombdir * self.shoot_force, self.bulletgrp, self.enemygrp)
+        self.bulletgrp.add(bomb)
+    def update(self, dt):
         self.move()
-        self.shoot()
-
+        self.shoot(dt)
+        self.shootbomb(dt)
 
 
 
