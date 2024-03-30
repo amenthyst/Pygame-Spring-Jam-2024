@@ -4,12 +4,12 @@ from Objects import tags
 class Particle(pygame.sprite.Sprite):
 
 
-    def __init__(self, state, bulletgrp: pygame.sprite.Group, pos: tuple):
+    def __init__(self, state, bulletgrp: pygame.sprite.Group, pos: tuple, radius):
         super().__init__(bulletgrp)
 
-        self.hotlist = ((255,0,0), (255,128,0), (255,255,0))
+        self.hotlist = ((255,0,0), (255,128,0), (255,255,0), (253,67,38), (247,77,77))
 
-        self.coldlist = ((51,255,255), (0,255,255), (153,204,255))
+        self.coldlist = ((51,255,255), (0,255,255), (153,204,255), (161,246,238), (104,203,239))
 
         self.state = state
 
@@ -22,13 +22,17 @@ class Particle(pygame.sprite.Sprite):
         elif self.state == "cold":
             self.color = random.choice(self.coldlist)
 
-        self.speed = random.uniform(15,15.5)
+        self.speed = random.uniform(4,5)
 
         self.direction = pygame.math.Vector2(random.uniform(-1,1), random.uniform(-1,1))
 
         self.damage = 0.05
 
-        self.radius = 75
+        self.radius = radius
+
+        self.duration = 1
+
+        self.timer = 0
 
         self.createsurf()
 
@@ -42,7 +46,12 @@ class Particle(pygame.sprite.Sprite):
             return
         other.damage(self.damage)
 
-    def move(self):
+    def move(self, dt):
+        self.timer += dt
+
+        if self.timer > self.duration:
+            self.kill()
+
         self.velocity = self.direction * self.speed
 
         self.originalpos += self.velocity
@@ -54,4 +63,4 @@ class Particle(pygame.sprite.Sprite):
 
 
     def update(self, dt):
-        self.move()
+        self.move(dt)

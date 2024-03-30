@@ -24,8 +24,8 @@ class Bomb(pygame.sprite.Sprite):
         if not isinstance(other, tags.Damageable):
             return
         other.damage(self.damage)
-        for _ in range(1,500):
-            self.bulletgrp.add(Particle("cold", self.bulletgrp, self.rect.center))
+        for _ in range(1,1000):
+            self.bulletgrp.add(Particle("cold", self.bulletgrp, self.rect.center, 125))
         self.kill()
 
     def attack(self):
