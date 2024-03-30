@@ -14,6 +14,7 @@ class Player(pygame.sprite.Sprite):
         self.friction = 0.845
         self.maxvelocity = 20
         self.acceleration = speed
+        self.bulletlastframe = False
 
         self.bullet = bullet
         self.shoot_force = 20
@@ -45,6 +46,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.velocity[1]
 
     def shoot(self):
+<<<<<<< Updated upstream
         self.shoot_timer += 1 / 60 # i rly dont like this but theres no way to get delta yet
         if not pygame.mouse.get_pressed(3)[0]:
             return
@@ -56,6 +58,9 @@ class Player(pygame.sprite.Sprite):
         bullet_dir = bullet_dir.normalize()
         bullet = self.bullet(self.get_centre(), bullet_dir * self.shoot_force)
         self.bulletgrp.add(bullet)
+=======
+        pass
+>>>>>>> Stashed changes
 
     def update(self):
         self.move()

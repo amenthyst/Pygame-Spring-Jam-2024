@@ -9,10 +9,10 @@ pygame.init()
 
 screen = pygame.display.set_mode((1000,600))
 
-pygame.display.set_caption("Pygame-Spring-Jam-2024 Jam")
+pygame.display.set_caption("Game Jam")
 clock = pygame.time.Clock()
 
-playersurf = images.renderplayer()
+playersurf, bullet = images.renderplayer()
 
 bulletgrp = pygame.sprite.Group()
 
