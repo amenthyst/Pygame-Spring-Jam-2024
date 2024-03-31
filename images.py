@@ -1,4 +1,9 @@
 import pygame
+
+def renderbackground():
+    coldbg = pygame.image.load("Pygame-Spring-Jam-2024/Graphics/coldbackground.jpg").convert_alpha()
+    coldbg = pygame.transform.scale(coldbg, (1000,600))
+    return coldbg
 def renderplayer():
     player = pygame.image.load("Pygame-Spring-Jam-2024/Graphics/player.png").convert_alpha()
     player = pygame.transform.scale(player, (35,35))

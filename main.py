@@ -16,6 +16,8 @@ clock = pygame.time.Clock()
 
 playersurf = images.renderplayer()
 
+coldbg = images.renderbackground()
+
 bulletgrp = pygame.sprite.Group()
 
 enemygrp = pygame.sprite.Group(Enemy((600,300)))
@@ -34,7 +36,7 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
-    screen.fill("white")
+    screen.blit(coldbg, (0,0))
 
     playergrp.update(dt)
 
