@@ -31,14 +31,27 @@ class Player(pygame.sprite.Sprite):
         self.bomb_timer = 0
         self.shoot_timer = 0
 
+        self.max_dodges = 2
+        self.remaining_dodges = 2
+        self.dodge_time = 0.1
+        self.dodge_timer = 0
+        self.dodging = False
+        self.dodge_dir = pygame.math.Vector2(0, 0)
+        self.dodge_speed = 5
+        self.dodge_lag = 0.3
+        self.dodge_lag_timer = 0
+        self.locked = False
+
     def get_pos(self) -> pygame.math.Vector2:
         return pygame.math.Vector2(self.rect.x, self.rect.y)
     def get_centre(self) -> pygame.math.Vector2:
         return pygame.math.Vector2(self.rect.centerx, self.rect.centery)
 
     def move(self):
-        pressed = pygame.key.get_pressed()
+        if self.dodge_lag_timer >= self.dodge_lag:
+            return
 
+        pressed = pygame.key.get_pressed()
 
         for vec in (self.controls[k] for k in self.controls if pressed[k]):
 
@@ -67,7 +80,7 @@ class Player(pygame.sprite.Sprite):
         bullet = self.bullet(self.get_centre(), bullet_dir * self.shoot_force, self.enemygrp)
         self.bulletgrp.add(bullet)
     def shootbomb(self, dt):
-        self.bomb_timer += dt
+        self.bomb_timer += dt * (2 if self.locked else 1)
         if not pygame.mouse.get_pressed(3)[2]:
             return
         if self.bomb_timer < self.bomb_cooldown:
@@ -95,6 +108,7 @@ class Player(pygame.sprite.Sprite):
         self.shoot(dt)
         self.shootbomb(dt)
         self.thrower(dt)
+        self.dodge(dt)
 
     def recoil(self):
 
@@ -111,3 +125,13 @@ class Player(pygame.sprite.Sprite):
 
         self.rect.x += self.recoilvelocity[0]
         self.rect.y += self.recoilvelocity[1]
+
+    def dodge(self, dt):
+        if self.dodging:
+            self.velocity = self.dodge_dir * self.dodge_speed
+            self.dodge_timer += dt
+            if self.dodge_timer >= self.dodge_time:
+                self.dodging = False
+                self.velocity = pygame.math.Vector2(0, 0)
+                self.locked = True
+            return
