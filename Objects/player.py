@@ -73,6 +73,19 @@ class Player(pygame.sprite.Sprite):
         bombdir = bombdir.normalize()
         bomb = self.bomb(self.get_centre(), bombdir * self.shoot_force, self.bulletgrp, self.enemygrp)
         self.bulletgrp.add(bomb)
+
+
+
+    def thrower(self, dt):
+        keys = pygame.key.get_pressed()
+        if not keys[pygame.K_f]:
+            return
+        for _ in range(0,3):
+            particledir = -(pygame.math.Vector2(pygame.mouse.get_pos()) - self.get_centre())
+            particle = self.particle("hot", "cone", self.enemygrp, self.bulletgrp, 5, self.get_centre(), particledir, 300, 0.6, 0.02)
+            self.bulletgrp.add(particle)
+
+
     def update(self, dt):
         self.move()
         self.shoot(dt)
