@@ -2,6 +2,7 @@ import pygame
 from sys import exit
 import Objects.bomb
 import Objects.bullet
+import Objects.particle
 from Enemies.sampleenemy import Enemy
 import images
 from Objects.player import Player
@@ -19,11 +20,12 @@ bulletgrp = pygame.sprite.Group()
 
 enemygrp = pygame.sprite.Group(Enemy((600,300)))
 
-playergrp = pygame.sprite.GroupSingle(Player(playersurf, (500,500), 1.4, Objects.bullet.Bullet, Objects.bomb.Bomb, bulletgrp, enemygrp))
+playergrp = pygame.sprite.GroupSingle(Player(playersurf, (500,500), 1.4, Objects.bullet.Bullet, Objects.bomb.Bomb, Objects.particle.Particle, bulletgrp, enemygrp))
 
 
 
 run = True
+
 while run:
 
     dt = clock.tick(60) / 1000
