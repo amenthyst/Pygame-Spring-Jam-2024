@@ -80,13 +80,13 @@ class Player(pygame.sprite.Sprite):
         self.bulletgrp.add(bomb)
 
 
-    def thrower(self, dt):
+    def thrower(self):
         keys = pygame.key.get_pressed()
         if not keys[pygame.K_f]:
             return
         for _ in range(0,3):
             particledir = -(pygame.math.Vector2(pygame.mouse.get_pos()) - self.get_centre())
-            particle = self.particle("hot", "cone", self.enemygrp, self.bulletgrp, 5, self.get_centre(), particledir, 300, 0.6, 0.02)
+            particle = self.particle("cold", "cone", self.enemygrp, self.bulletgrp, 5, self.get_centre(), particledir, 300, 0.6, 0.02)
             self.bulletgrp.add(particle)
 
 
@@ -94,7 +94,7 @@ class Player(pygame.sprite.Sprite):
         self.move()
         self.shoot(dt)
         self.shootbomb(dt)
-        self.thrower(dt)
+        self.thrower()
 
     def recoil(self):
 
