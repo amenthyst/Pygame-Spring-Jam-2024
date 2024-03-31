@@ -4,7 +4,7 @@ from Objects import tags
 class Particle(pygame.sprite.Sprite):
 
 
-    def __init__(self, state, mode, bulletgrp: pygame.sprite.Group, speed, pos: tuple, direction: pygame.math.Vector2, radius, duration):
+    def __init__(self, state, mode, enemygrp: pygame.sprite.Group, bulletgrp: pygame.sprite.Group, speed, pos: tuple, direction: pygame.math.Vector2, radius, duration, damage):
         super().__init__(bulletgrp)
 
         self.hotlist = ((255,0,0), (255,128,0), (255,255,0), (253,67,38), (247,77,77))
@@ -18,6 +18,8 @@ class Particle(pygame.sprite.Sprite):
         self.originalpos = pygame.math.Vector2(0,0)
 
         self.pos = pygame.math.Vector2(pos)
+
+        self.enemygrp = enemygrp
 
         self.bulletgrp = bulletgrp
 
@@ -42,7 +44,7 @@ class Particle(pygame.sprite.Sprite):
             self.speed = random.uniform(5,10)
 
 
-        self.damage = 0.05
+        self.damage = damage
 
         self.range = radius
 
@@ -63,6 +65,8 @@ class Particle(pygame.sprite.Sprite):
         if not isinstance(other, tags.Damageable):
             return
         other.damage(self.damage)
+        if self.mode != "steam":
+            self.kill()
 
     def move(self, dt):
         self.timer += dt
@@ -86,9 +90,16 @@ class Particle(pygame.sprite.Sprite):
             if not isinstance(obj, Particle):
                 continue
             if (obj.state == "hot" and self.state == "cold") or (obj.state == "cold" and self.state == "hot"):
-                self.bulletgrp.add(Particle("steam", "ball", self.bulletgrp, 0.3, self.pos, None, 150, 20))
+                self.bulletgrp.add(Particle("steam", "ball", self.enemygrp, self.bulletgrp, 0.3, self.pos, None, 150, 20, 0))
                 self.kill()
                 obj.kill()
+
+    def attack(self):
+        hitlist = pygame.sprite.spritecollide(self, self.enemygrp, False)
+        for obj in hitlist:
+            self.on_collide(obj)
+
     def update(self, dt):
         self.steam()
         self.move(dt)
+        self.attack()

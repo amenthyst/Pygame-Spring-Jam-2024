@@ -25,6 +25,7 @@ playergrp = pygame.sprite.GroupSingle(Player(playersurf, (500,500), 1.4, Objects
 
 
 run = True
+
 while run:
 
     dt = clock.tick(60) / 1000
