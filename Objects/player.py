@@ -1,12 +1,15 @@
 import pygame
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, playersurf, position, speed, bullet, bomb, bullet_group, enemygrp):
+    def __init__(self, playersurf, position, speed, bullet, bomb, particle, bullet_group, enemygrp):
         super().__init__()
         self.image = playersurf
         self.rect = self.image.get_rect(center=position)
 
         self.velocity = pygame.math.Vector2()
+
+        self.recoilvelocity = pygame.math.Vector2()
+
         self.controls = {pygame.K_w: (0, -1),
                          pygame.K_s: (0, 1),
                          pygame.K_a: (-1, 0),
@@ -17,6 +20,8 @@ class Player(pygame.sprite.Sprite):
 
         self.bullet = bullet
         self.bomb = bomb
+        self.particle = particle
+
         self.shoot_force = 20
         self.bulletgrp = bullet_group
         self.enemygrp = enemygrp
@@ -58,7 +63,7 @@ class Player(pygame.sprite.Sprite):
         mouse_pos = pygame.mouse.get_pos()
         bullet_dir = pygame.math.Vector2(mouse_pos) - self.get_centre()
         bullet_dir = bullet_dir.normalize()
-        bullet = self.bullet(self.get_centre(), bullet_dir * self.shoot_force)
+        bullet = self.bullet(self.get_centre(), bullet_dir * self.shoot_force, self.enemygrp)
         self.bulletgrp.add(bullet)
 
     def shootbomb(self, dt):
@@ -73,15 +78,36 @@ class Player(pygame.sprite.Sprite):
         bombdir = bombdir.normalize()
         bomb = self.bomb(self.get_centre(), bombdir * self.shoot_force, self.bulletgrp, self.enemygrp)
         self.bulletgrp.add(bomb)
+
+    def thrower(self, dt):
+        keys = pygame.key.get_pressed()
+        if not keys[pygame.K_f]:
+            return
+        for _ in range(0,3):
+            particledir = -(pygame.math.Vector2(pygame.mouse.get_pos()) - self.get_centre())
+            particle = self.particle("hot", "cone", self.enemygrp, self.bulletgrp, 5, self.get_centre(), particledir, 300, 0.6, 0.02)
+            self.bulletgrp.add(particle)
+
+        
+
     def update(self, dt):
         self.move()
         self.shoot(dt)
         self.shootbomb(dt)
+        self.thrower(dt)
 
+    def recoil(self):
 
+        particledir = self.get_centre() - pygame.mouse.get_pos()
+        self.recoilvelocity += particledir * self.acceleration/20
 
+        if self.recoilvelocity.length():
+            self.recoilvelocity.normalize_ip()
 
+        if self.recoilvelocity.magnitude() > self.maxvelocity/20:
+            self.recoilvelocity = self.recoilvelocity.normalize() * self.maxvelocity/20
 
+        self.recoilvelocity *= self.friction
 
-
-
+        self.rect.x += self.recoilvelocity[0]
+        self.rect.y += self.recoilvelocity[1]
