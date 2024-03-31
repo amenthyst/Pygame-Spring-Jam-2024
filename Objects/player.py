@@ -55,7 +55,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.velocity[1]
 
     def shoot(self, dt):
-        self.shoot_timer += dt # i rly dont like this but theres no way to get delta yet
+        self.shoot_timer += dt
         if not pygame.mouse.get_pressed(3)[0]:
             return
         if self.shoot_timer < self.shoot_cooldown:

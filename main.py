@@ -14,7 +14,7 @@ screen = pygame.display.set_mode((1000,600))
 pygame.display.set_caption("Game Jam")
 clock = pygame.time.Clock()
 
-playersurf, bullet = images.renderplayer()
+playersurf = images.renderplayer()
 
 bulletgrp = pygame.sprite.Group()
 

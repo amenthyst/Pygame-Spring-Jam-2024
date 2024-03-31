@@ -67,6 +67,7 @@ class Particle(pygame.sprite.Sprite):
         self.image.set_colorkey("black")
         pygame.draw.circle(self.image, self.color, center=(2, 2), radius=8)
         self.rect = self.image.get_rect(center=self.pos)
+
     def on_collide(self, other):
         if not isinstance(other, tags.Damageable):
             return
