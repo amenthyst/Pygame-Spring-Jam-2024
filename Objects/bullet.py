@@ -5,7 +5,7 @@ from Objects import tags
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, position, velocity):
         super().__init__()
-        self.image = images.renderbullets()[0]
+        self.image = pygame.transform.scale(images.renderbullets()[0], (10,10))
         self.rect = self.image.get_rect(center=tuple(position))
         self.velocity = pygame.math.Vector2(velocity)
         self.damage = 1
