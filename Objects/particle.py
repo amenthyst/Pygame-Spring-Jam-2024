@@ -2,11 +2,24 @@ import pygame
 import random
 from Objects import tags
 class Particle(pygame.sprite.Sprite):
+    particles = []
+    MAX_PARTICLES = 600
 
+    def __new__(cls, *args, **kwargs):
+        if len(Particle.particles) > Particle.MAX_PARTICLES:
+            next = Particle.particles[0]
+            Particle.particles.pop(0)
+            Particle.particles.append(next)
+            return next
+        particle = super().__new__(cls)
+        Particle.particles.append(particle)
+        return particle
 
     def __init__(self, state, mode, enemygrp: pygame.sprite.Group, bulletgrp: pygame.sprite.Group, speed, pos: tuple, direction: pygame.math.Vector2, radius, duration, damage):
         super().__init__(bulletgrp)
+        self.initialize(state, mode, enemygrp, bulletgrp, speed, pos, direction, radius, duration, damage)
 
+    def initialize(self, state, mode, enemygrp: pygame.sprite.Group, bulletgrp: pygame.sprite.Group, speed, pos: tuple, direction: pygame.math.Vector2, radius, duration, damage):
         self.hotlist = ((255,0,0), (255,128,0), (255,255,0), (253,67,38), (247,77,77))
 
         self.coldlist = ((51,255,255), (0,255,255), (153,204,255), (161,246,238), (104,203,239))
