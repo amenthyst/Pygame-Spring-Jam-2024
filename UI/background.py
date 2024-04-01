@@ -48,7 +48,10 @@ class Background(pygame.sprite.Sprite):
         elif self.state == "cold" and not self.transitioned:
             self.image = self.ice
             for i in range(0,100):
+
                 self.icerect = self.image.get_rect(center=(i*12, 0))
+
+
                 self.transitionlist.append(self.icerect)
             self.transitioned = True
 
@@ -61,7 +64,9 @@ class Background(pygame.sprite.Sprite):
                 self.bgrect.y = item.y-600
                 item.y -= 8
 
+
                 if self.bgrect.y < -594:
+
                     self.transitionlist = []
                     self.player.changing = False
                     self.transitioned = False
@@ -69,9 +74,12 @@ class Background(pygame.sprite.Sprite):
 
         elif self.state == "cold":
             for item in self.transitionlist:
+
                 self.bgrect.y = item.y-600
                 item.y += 8
+
                 if self.bgrect.y > 0:
+
                     self.transitionlist = []
                     self.player.changing = False
                     self.transitioned = False
