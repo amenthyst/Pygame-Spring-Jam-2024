@@ -106,7 +106,7 @@ class Particle(pygame.sprite.Sprite):
             if not isinstance(obj, Particle):
                 continue
             if (obj.state == "hot" and self.state == "cold") or (obj.state == "cold" and self.state == "hot"):
-                self.bulletgrp.add(Particle("steam", "ball", self.enemygrp, self.bulletgrp, 0.3, self.pos, None, 150, 20, 0))
+                self.bulletgrp.add(Particle("steam", "ball", self.enemygrp, self.bulletgrp, 0.1, self.pos, None, 150, 20, 0))
                 self.kill()
                 obj.kill()
 
