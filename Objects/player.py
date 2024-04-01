@@ -31,6 +31,10 @@ class Player(pygame.sprite.Sprite):
         self.bomb_timer = 0
         self.shoot_timer = 0
 
+        self.state = "cold"
+
+        self.changing = False
+
     def get_pos(self) -> pygame.math.Vector2:
         return pygame.math.Vector2(self.rect.x, self.rect.y)
     def get_centre(self) -> pygame.math.Vector2:
@@ -76,7 +80,7 @@ class Player(pygame.sprite.Sprite):
         mouse_pos = pygame.mouse.get_pos()
         bombdir = pygame.math.Vector2(mouse_pos) - self.get_centre()
         bombdir = bombdir.normalize()
-        bomb = self.bomb(self.get_centre(), bombdir * self.shoot_force, self.bulletgrp, self.enemygrp)
+        bomb = self.bomb(self.get_centre(), bombdir * self.shoot_force, self.bulletgrp, self.enemygrp, self.state)
         self.bulletgrp.add(bomb)
 
 
@@ -86,7 +90,7 @@ class Player(pygame.sprite.Sprite):
             return
         for _ in range(0,3):
             particledir = -(pygame.math.Vector2(pygame.mouse.get_pos()) - self.get_centre())
-            particle = self.particle("cold", "cone", self.enemygrp, self.bulletgrp, 5, self.get_centre(), particledir, 300, 0.6, 0.02)
+            particle = self.particle(self.state, "cone", self.enemygrp, self.bulletgrp, 5, self.get_centre(), particledir, 300, 0.6, 0.02)
             self.bulletgrp.add(particle)
 
 
@@ -96,8 +100,9 @@ class Player(pygame.sprite.Sprite):
         self.shootbomb(dt)
         self.thrower()
 
-    def recoil(self):
 
+    def recoil(self):
+        # most annoying thing known to man
         particledir = self.get_centre() - pygame.mouse.get_pos()
         self.recoilvelocity += particledir * self.acceleration/20
 
