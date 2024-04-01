@@ -5,14 +5,15 @@ from Objects import tags
 from Objects.particle import Particle
 
 class Bomb(pygame.sprite.Sprite):
-    def __init__(self, position, velocity, bulletgrp, enemygrp):
+    def __init__(self, position, velocity, bulletgrp, enemygrp, state):
         super().__init__()
         self.velocity = pygame.math.Vector2(velocity)
-        self.image = pygame.transform.rotate(images.renderbullets()[1], self.getangle()+90)
+        self.image = pygame.transform.rotate(images.renderbullets()[2], self.getangle()+90)
         self.rect = self.image.get_rect(center=position)
         self.damage = 1
         self.bulletgrp = bulletgrp
         self.enemygrp = enemygrp
+        self.state = state
     def update(self, dt):
         self.move()
         self.attack()
@@ -26,7 +27,7 @@ class Bomb(pygame.sprite.Sprite):
         other.damage(self.damage)
 
         for _ in range(1,150):
-            self.bulletgrp.add(Particle("cold", "ball", self.enemygrp, self.bulletgrp, 5, self.rect.center, None, 150, 1.5, 0.02))
+            self.bulletgrp.add(Particle(self.state, "ball", self.enemygrp, self.bulletgrp, 5, self.rect.center, None, 150, 1.5, 0.02))
 
         self.kill()
 

@@ -6,6 +6,8 @@ import Objects.particle
 from Enemies.sampleenemy import Enemy
 import images
 from Objects.player import Player
+from UI.switchbar import Switchbar
+from UI.background import Background
 
 pygame.init()
 
@@ -16,7 +18,7 @@ clock = pygame.time.Clock()
 
 playersurf = images.renderplayer()
 
-coldbg = images.renderbackground()
+
 
 bulletgrp = pygame.sprite.Group()
 
@@ -24,7 +26,7 @@ enemygrp = pygame.sprite.Group(Enemy((600,300)))
 
 playergrp = pygame.sprite.GroupSingle(Player(playersurf, (500,500), 1.4, Objects.bullet.Bullet, Objects.bomb.Bomb, Objects.particle.Particle, bulletgrp, enemygrp))
 
-
+uigrp = pygame.sprite.Group(Background(playergrp.sprites()[0]), Switchbar(playergrp.sprites()[0], (700,50), 5))
 
 run = True
 
@@ -36,19 +38,27 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
-    screen.blit(coldbg, (0,0))
-
-    playergrp.update(dt)
+    for obj in uigrp.sprites():
+        obj.draw(screen)
 
     playergrp.draw(screen)
 
-    bulletgrp.update(dt)
 
     bulletgrp.draw(screen)
 
     enemygrp.draw(screen)
 
     enemygrp.update(dt)
+
+    uigrp.update(dt)
+
+    bulletgrp.update(dt)
+
+    playergrp.update(dt)
+
+
+
+
 
     pygame.display.update()
 
