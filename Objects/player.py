@@ -12,10 +12,6 @@ class Player(pygame.sprite.Sprite):
 
         self.recoilvelocity = pygame.math.Vector2()
 
-        self.controls = {pygame.K_w: (0, -1),
-                         pygame.K_s: (0, 1),
-                         pygame.K_a: (-1, 0),
-                         pygame.K_d: (1, 0)}
         self.friction = 0.845
         self.maxvelocity = 20
         self.acceleration = speed
@@ -35,7 +31,7 @@ class Player(pygame.sprite.Sprite):
 
         self.max_dodges = 2
         self.remaining_dodges = 2
-        self.dodge_time = 0.08
+        self.dodge_time = 0.085
         self.dodge_timer = 0
         self.dodging = False
         self.dodge_dir = pygame.math.Vector2(0, 0)
@@ -59,9 +55,10 @@ class Player(pygame.sprite.Sprite):
 
         pressed = Systems.input.get_pressed()
 
-        for vec in (self.controls[k] for k in self.controls if pressed[k]):
-
-            self.velocity += pygame.math.Vector2(vec) * self.acceleration
+        dir = Systems.input.get_vector(pygame.K_a, pygame.K_d,
+                                       pygame.K_w, pygame.K_s)
+        if dir.length() > 0:
+            self.velocity += dir.normalize() * self.acceleration
 
         if self.velocity.magnitude() > self.maxvelocity:
             self.velocity = self.velocity.normalize() * self.maxvelocity
