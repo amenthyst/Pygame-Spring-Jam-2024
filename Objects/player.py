@@ -35,11 +35,11 @@ class Player(pygame.sprite.Sprite):
 
         self.max_dodges = 2
         self.remaining_dodges = 2
-        self.dodge_time = 0.1
+        self.dodge_time = 0.08
         self.dodge_timer = 0
         self.dodging = False
         self.dodge_dir = pygame.math.Vector2(0, 0)
-        self.dodge_speed = 30
+        self.dodge_speed = 40
         self.dodge_lag = 0.3
         self.dodge_lag_timer = 0.3
         self.locked = False
@@ -73,7 +73,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.velocity[1]
 
     def shoot(self, dt):
-        self.shoot_timer += dt
+        self.shoot_timer += dt * (2 if self.locked else 1)
         if not pygame.mouse.get_pressed(3)[0]:
             return
         if self.shoot_timer < self.shoot_cooldown:
@@ -133,6 +133,10 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.recoilvelocity[1]
 
     def dodge(self, dt):
+        dodge_dir = Systems.input.get_vector(pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s)
+        if dodge_dir != pygame.math.Vector2(0, 0):
+            self.dodge_dir = dodge_dir
+
         if not self.dodging and not self.locked and self.remaining_dodges < self.max_dodges:
             self.dodge_regen_timer += dt
             if self.dodge_regen_timer >= self.dodge_regen_time:
@@ -153,12 +157,9 @@ class Player(pygame.sprite.Sprite):
             self.dodge_lag_timer += dt
             if self.velocity.length() > 0:
                 self.locked = False
-        if Systems.input.get_pressed()[pygame.K_LSHIFT] and not self.dodging and self.remaining_dodges > 0:
+        if Systems.input.is_key_just_pressed(pygame.K_LSHIFT) and not self.dodging and self.remaining_dodges > 0:
             print("dodge")
             self.dodging = True
-            keys = Systems.input.get_pressed()
-            self.dodge_dir = pygame.math.Vector2((1 if keys[pygame.K_d] else 0) + (-1 if keys[pygame.K_a] else 0),
-                                                 (1 if keys[pygame.K_s] else 0) + (-1 if keys[pygame.K_w] else 0))
             self.remaining_dodges -= 1
             self.dodge_timer = 0
             self.dodge_lag_timer = 0

@@ -28,13 +28,13 @@ playergrp = pygame.sprite.GroupSingle(Player(playersurf, (500,500), 1.4, Objects
 run = True
 
 while run:
+    Systems.input.update()
 
     dt = clock.tick(60) / 1000
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-    Systems.input.update()
 
     screen.fill("white")
 
