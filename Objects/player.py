@@ -78,24 +78,24 @@ class Player(pygame.sprite.Sprite):
 
     def shoot(self, dt):
         self.shoot_timer += dt * (2 if self.locked else 1)
-        if not pygame.mouse.get_pressed(3)[0]:
+        if not Systems.input.get_pressed_mouse()[0]:
             return
         if self.shoot_timer < self.shoot_cooldown:
             return
         self.shoot_timer = 0
-        mouse_pos = pygame.mouse.get_pos()
+        mouse_pos = Systems.input.get_pos()
         bullet_dir = pygame.math.Vector2(mouse_pos) - self.get_centre()
         bullet_dir = bullet_dir.normalize()
         bullet = self.bullet(self.get_centre(), bullet_dir * self.shoot_force, self.enemygrp, self.state)
         self.bulletgrp.add(bullet)
     def shootbomb(self, dt):
         self.bomb_timer += dt * (2 if self.locked else 1)
-        if not pygame.mouse.get_pressed(3)[2]:
+        if not Systems.input.get_pressed_mouse()[2]:
             return
         if self.bomb_timer < self.bomb_cooldown:
             return
         self.bomb_timer = 0
-        mouse_pos = pygame.mouse.get_pos()
+        mouse_pos = Systems.input.get_pos()
         bombdir = pygame.math.Vector2(mouse_pos) - self.get_centre()
         bombdir = bombdir.normalize()
         bomb = self.bomb(self.get_centre(), bombdir * self.shoot_force, self.bulletgrp, self.enemygrp, self.state)
@@ -108,7 +108,7 @@ class Player(pygame.sprite.Sprite):
         if not keys[pygame.K_f]:
             return
         for _ in range(0,3):
-            particledir = -(pygame.math.Vector2(pygame.mouse.get_pos()) - self.get_centre())
+            particledir = -(pygame.math.Vector2(Systems.input.get_pos()) - self.get_centre())
             particle = self.particle(self.state, "cone", self.enemygrp, self.bulletgrp, 5, self.get_centre(), particledir, 300, 0.6, 0.02)
             self.bulletgrp.add(particle)
 
@@ -128,7 +128,7 @@ class Player(pygame.sprite.Sprite):
 
     def recoil(self):
         # most annoying thing known to man
-        particledir = self.get_centre() - pygame.mouse.get_pos()
+        particledir = self.get_centre() - Systems.input.get_pos()
         self.recoilvelocity += particledir * self.acceleration/20
 
         if self.recoilvelocity.length():
@@ -176,7 +176,7 @@ class Player(pygame.sprite.Sprite):
             self.dodge_lag_timer = 0
 
     def getangle(self):
-        direction = pygame.math.Vector2(pygame.mouse.get_pos()) - self.get_centre()
+        direction = pygame.math.Vector2(Systems.input.get_pos()) - self.get_centre()
         return math.degrees(math.atan2(direction.x, direction.y)) + 180
 
     def draw(self, screen):
