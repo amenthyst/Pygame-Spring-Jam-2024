@@ -5,9 +5,11 @@ def renderbackground():
     bg = pygame.transform.scale(bg, (1000,1200))
     return bg
 def renderplayer():
-    player = pygame.image.load("Graphics/player.png").convert_alpha()
-    player = pygame.transform.scale(player, (35,35))
-    return player
+    fireplayer = pygame.image.load("Graphics/firesprite.png").convert_alpha()
+    fireplayer = pygame.transform.scale(fireplayer, (75,75))
+    iceplayer = pygame.image.load("Graphics/icesprite.png").convert_alpha()
+    iceplayer = pygame.transform.scale(iceplayer, (75,75))
+    return (fireplayer, iceplayer)
 
 def renderbullets():
 
@@ -15,7 +17,11 @@ def renderbullets():
     ice = pygame.image.load("Graphics/ice.png").convert_alpha()
     fire = pygame.image.load("Graphics/fire.png").convert_alpha()
 
-    bomb = pygame.image.load("Graphics/coldbomb.png").convert_alpha()
-    bomb = pygame.transform.scale(bomb, (50,15))
-    return (ice, fire, bomb)
+    icebomb = pygame.image.load("Graphics/coldbomb.png").convert_alpha()
+    icebomb = pygame.transform.scale(icebomb, (50,15))
+
+    firebomb = pygame.image.load("Graphics/firebomb.png").convert_alpha()
+    firebomb = pygame.transform.scale(firebomb, (50,15))
+
+    return (ice, fire, icebomb, firebomb)
 

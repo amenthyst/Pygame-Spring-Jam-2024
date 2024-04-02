@@ -4,8 +4,8 @@ import math
 class Background(pygame.sprite.Sprite):
     def __init__(self, player):
         super().__init__()
-        self.ice = images.renderbullets()[0]
-        self.fire = images.renderbullets()[1]
+        self.ice = pygame.transform.scale(images.renderbullets()[0], (32,32))
+        self.fire = pygame.transform.scale(images.renderbullets()[1], (32,32))
 
         self.bg = images.renderbackground()
         self.bgrect = self.bg.get_rect(topleft=(0,0))
@@ -25,7 +25,7 @@ class Background(pygame.sprite.Sprite):
         for rect in self.transitionlist:
             screen.blit(self.image, rect)
 
-        print(self.bgrect.y)
+
     def transition(self):
         self.changing = self.player.changing
 
@@ -39,21 +39,22 @@ class Background(pygame.sprite.Sprite):
         if self.state == "hot" and not self.transitioned:
 
             self.image = self.fire
-            for i in range(0,100):
-                self.firerect = self.image.get_rect(center=(i*12, 600))
+            for i in range(0,50):
+                self.firerect = self.image.get_rect(center=(i*26, 600))
                 self.transitionlist.append(self.firerect)
             self.transitioned = True
 
 
         elif self.state == "cold" and not self.transitioned:
             self.image = self.ice
-            for i in range(0,100):
+            for i in range(0,50):
 
-                self.icerect = self.image.get_rect(center=(i*12, 0))
+                self.icerect = self.image.get_rect(center=(i*26, 0))
 
 
                 self.transitionlist.append(self.icerect)
             self.transitioned = True
+
 
 
 
@@ -75,7 +76,7 @@ class Background(pygame.sprite.Sprite):
         elif self.state == "cold":
             for item in self.transitionlist:
 
-                self.bgrect.y = item.y-600
+                self.bgrect.y = item.y-572
                 item.y += 8
 
                 if self.bgrect.y > 0:

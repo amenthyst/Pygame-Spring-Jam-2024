@@ -1,9 +1,15 @@
 import pygame
+import math
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, playersurf, position, speed, bullet, bomb, particle, bullet_group, enemygrp):
+    def __init__(self, playertuple, position, speed, bullet, bomb, particle, bullet_group, enemygrp):
         super().__init__()
-        self.image = playersurf
+        self.state = "cold"
+
+        self.firesprite = playertuple[0]
+        self.icesprite = playertuple[1]
+
+        self.checktexture()
         self.rect = self.image.get_rect(center=position)
 
         self.velocity = pygame.math.Vector2()
@@ -31,7 +37,7 @@ class Player(pygame.sprite.Sprite):
         self.bomb_timer = 0
         self.shoot_timer = 0
 
-        self.state = "cold"
+
 
         self.changing = False
 
@@ -68,7 +74,7 @@ class Player(pygame.sprite.Sprite):
         mouse_pos = pygame.mouse.get_pos()
         bullet_dir = pygame.math.Vector2(mouse_pos) - self.get_centre()
         bullet_dir = bullet_dir.normalize()
-        bullet = self.bullet(self.get_centre(), bullet_dir * self.shoot_force, self.enemygrp)
+        bullet = self.bullet(self.get_centre(), bullet_dir * self.shoot_force, self.enemygrp, self.state)
         self.bulletgrp.add(bullet)
     def shootbomb(self, dt):
         self.bomb_timer += dt
@@ -95,10 +101,14 @@ class Player(pygame.sprite.Sprite):
 
 
     def update(self, dt):
+        self.checktexture()
+        self.rotimage = pygame.transform.rotate(self.image, self.getangle())
+        self.rotrect = self.rotimage.get_rect(center=tuple(self.get_centre()))
         self.move()
         self.shoot(dt)
         self.shootbomb(dt)
         self.thrower()
+
 
 
     def recoil(self):
@@ -116,3 +126,16 @@ class Player(pygame.sprite.Sprite):
 
         self.rect.x += self.recoilvelocity[0]
         self.rect.y += self.recoilvelocity[1]
+
+    def getangle(self):
+        direction = pygame.math.Vector2(pygame.mouse.get_pos()) - self.get_centre()
+        return math.degrees(math.atan2(direction.x, direction.y)) + 180
+
+    def draw(self, screen):
+        screen.blit(self.rotimage, self.rotrect)
+
+    def checktexture(self):
+        if self.state == "hot":
+            self.image = self.firesprite
+        elif self.state == "cold":
+            self.image = self.icesprite

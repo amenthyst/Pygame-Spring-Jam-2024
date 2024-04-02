@@ -16,7 +16,7 @@ screen = pygame.display.set_mode((1000,600))
 pygame.display.set_caption("Game Jam")
 clock = pygame.time.Clock()
 
-playersurf = images.renderplayer()
+playertuple = images.renderplayer()
 
 
 
@@ -24,7 +24,7 @@ bulletgrp = pygame.sprite.Group()
 
 enemygrp = pygame.sprite.Group(Enemy((600,300)))
 
-playergrp = pygame.sprite.GroupSingle(Player(playersurf, (500,500), 1.4, Objects.bullet.Bullet, Objects.bomb.Bomb, Objects.particle.Particle, bulletgrp, enemygrp))
+playergrp = pygame.sprite.GroupSingle(Player(playertuple,(500,500), 1.4, Objects.bullet.Bullet, Objects.bomb.Bomb, Objects.particle.Particle, bulletgrp, enemygrp))
 
 uigrp = pygame.sprite.Group(Background(playergrp.sprites()[0]), Switchbar(playergrp.sprites()[0], (700,50), 5))
 
@@ -41,7 +41,6 @@ while run:
     for obj in uigrp.sprites():
         obj.draw(screen)
 
-    playergrp.draw(screen)
 
 
     bulletgrp.draw(screen)
@@ -56,6 +55,8 @@ while run:
 
     playergrp.update(dt)
 
+    for obj in playergrp.sprites():
+        obj.draw(screen)
 
 
 

@@ -8,12 +8,16 @@ class Bomb(pygame.sprite.Sprite):
     def __init__(self, position, velocity, bulletgrp, enemygrp, state):
         super().__init__()
         self.velocity = pygame.math.Vector2(velocity)
-        self.image = pygame.transform.rotate(images.renderbullets()[2], self.getangle()+90)
-        self.rect = self.image.get_rect(center=position)
+
         self.damage = 1
         self.bulletgrp = bulletgrp
         self.enemygrp = enemygrp
         self.state = state
+        if self.state == "hot":
+            self.image = pygame.transform.rotate(images.renderbullets()[3], self.getangle() + 90)
+        elif self.state == "cold":
+            self.image = pygame.transform.rotate(images.renderbullets()[2], self.getangle() + 90)
+        self.rect = self.image.get_rect(center=position)
     def update(self, dt):
         self.move()
         self.attack()
