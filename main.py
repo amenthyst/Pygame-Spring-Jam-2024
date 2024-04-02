@@ -19,7 +19,10 @@ clock = pygame.time.Clock()
 
 playertuple = images.renderplayer()
 
+MENU_MODE = 0
+GAME_MODE = 1
 
+current_mode = 0
 
 bulletgrp = pygame.sprite.Group()
 
@@ -31,14 +34,10 @@ uigrp = pygame.sprite.Group(Background(playergrp.sprites()[0]), Switchbar(player
 
 run = True
 
-while run:
-    Systems.input.update()
+def run_menu():
+    pass
 
-    dt = clock.tick(60) / 1000
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
+def run_game():
 
     for obj in uigrp.sprites():
         obj.draw(screen)
@@ -61,7 +60,20 @@ while run:
         obj.draw(screen)
 
 
+while run:
+    Systems.input.update()
 
+    dt = clock.tick(60) / 1000
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+
+    if current_mode == MENU_MODE:
+        run_menu()
+
+    elif current_mode == GAME_MODE:
+        run_game()
 
     pygame.display.update()
 
