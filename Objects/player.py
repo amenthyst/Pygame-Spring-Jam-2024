@@ -1,9 +1,15 @@
 import pygame
 import Systems.input
 import math
+from Objects import tags
+class Player(pygame.sprite.Sprite, tags.Damageable):
+    Instance = None
+    def __init__(self, playertuple, position, speed, bullet, bomb, particle, bullet_group, enemygrp, health):
+        # singleton
+        if Player.Instance != None:
+            raise Exception("Multiple Player instances! :(")
+        Player.Instance = self
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self, playertuple, position, speed, bullet, bomb, particle, bullet_group, enemygrp):
         super().__init__()
         self.state = "cold"
 
@@ -50,6 +56,9 @@ class Player(pygame.sprite.Sprite):
         self.changing = False
 
         self.health = health
+        self.maxhealth = health
+        self.size = (75,75)
+
 
     def get_pos(self) -> pygame.math.Vector2:
         return pygame.math.Vector2(self.rect.x, self.rect.y)
@@ -181,10 +190,22 @@ class Player(pygame.sprite.Sprite):
 
     def draw(self, screen):
         screen.blit(self.rotimage, self.rotrect)
+        self.healthbar(screen)
 
     def checktexture(self):
         if self.state == "hot":
             self.image = self.firesprite
         elif self.state == "cold":
             self.image = self.icesprite
+
+
+    def damage(self, amount: int):
+        self.health -= amount
+        if self.health <= 0:
+            self.kill()
+
+    def healthbar(self, screen):
+        pygame.draw.rect(screen, "black", (self.rect.x - 3, self.rect.y - 15, self.size[0], 10), 2)
+        ratio = self.health / self.maxhealth
+        pygame.draw.rect(screen, "green", (self.rect.x - 1, self.rect.y - 13, self.size[0] * ratio - 4, 6))
 

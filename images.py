@@ -2,7 +2,7 @@ import pygame
 
 def renderbackground():
     bg = pygame.image.load("Graphics/background.png").convert_alpha()
-    bg = pygame.transform.scale(bg, (1000,1200))
+    bg = pygame.transform.rotate(bg, 180)
     return bg
 def renderplayer():
     fireplayer = pygame.image.load("Graphics/firesprite.png").convert_alpha()
@@ -24,3 +24,8 @@ def renderbullets():
 
     return (ice, fire, icebomb, firebomb)
 
+def renderenemies():
+
+    firebasher = pygame.image.load("Graphics/enemysprites/firebasher.png").convert_alpha()
+
+    return (firebasher)
