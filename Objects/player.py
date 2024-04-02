@@ -49,6 +49,8 @@ class Player(pygame.sprite.Sprite):
 
         self.changing = False
 
+        self.health = health
+
     def get_pos(self) -> pygame.math.Vector2:
         return pygame.math.Vector2(self.rect.x, self.rect.y)
     def get_centre(self) -> pygame.math.Vector2:
