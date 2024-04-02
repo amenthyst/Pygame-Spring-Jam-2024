@@ -23,11 +23,15 @@ playertuple = images.renderplayer()
 
 bulletgrp = pygame.sprite.Group()
 
-enemygrp = pygame.sprite.Group(Enemy((600,300)))
+
+enemygrp = pygame.sprite.Group(Enemy((600,300), 10, 1, 10, (80,80)))
 
 playergrp = pygame.sprite.GroupSingle(Player(playertuple,(500,500), 1.4, Objects.bullet.Bullet, Objects.bomb.Bomb, Objects.particle.Particle, bulletgrp, enemygrp))
 
-uigrp = pygame.sprite.Group(Background(playergrp.sprites()[0]), Switchbar(playergrp.sprites()[0], (700,50), 5))
+ship = playergrp.sprites()[0]
+
+uigrp = pygame.sprite.Group(Background(ship), Switchbar(ship, (700,50), 5))
+
 
 run = True
 
@@ -47,7 +51,8 @@ while run:
 
     bulletgrp.draw(screen)
 
-    enemygrp.draw(screen)
+    for obj in enemygrp.sprites():
+        obj.draw(screen)
 
     enemygrp.update(dt)
 

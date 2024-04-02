@@ -155,8 +155,8 @@ class Player(pygame.sprite.Sprite):
                 self.dodge_regen_timer = 0
 
         if self.dodging:
-            print("dodging", self.dodge_dir)
-            self.velocity = self.dodge_dir.normalize() * self.dodge_speed
+            if self.dodge_dir.length():
+                self.velocity = self.dodge_dir.normalize() * self.dodge_speed
             self.dodge_timer += dt
             if self.dodge_timer >= self.dodge_time:
                 self.dodging = False
@@ -164,12 +164,10 @@ class Player(pygame.sprite.Sprite):
                 self.locked = True
             return
         if self.locked:
-            print("locked")
             self.dodge_lag_timer += dt
             if self.velocity.length() > 0:
                 self.locked = False
         if Systems.input.is_key_just_pressed(pygame.K_LSHIFT) and not self.dodging and self.remaining_dodges > 0:
-            print("dodge")
             self.dodging = True
             self.remaining_dodges -= 1
             self.dodge_timer = 0
