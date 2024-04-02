@@ -24,7 +24,7 @@ playertuple = images.renderplayer()
 bulletgrp = pygame.sprite.Group()
 
 
-enemygrp = pygame.sprite.Group(Enemy((600,300), 10, 1, 10))
+enemygrp = pygame.sprite.Group(Enemy((600,300), 50, 1, 10))
 
 playergrp = pygame.sprite.GroupSingle(Player(playertuple,(500,500), 1.4, Objects.bullet.Bullet, Objects.bomb.Bomb, Objects.particle.Particle, bulletgrp, enemygrp, 100))
 
