@@ -1,4 +1,6 @@
 import pygame
+import Systems.input
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, playersurf, position, speed, bullet, bomb, particle, bullet_group, enemygrp):
@@ -37,10 +39,12 @@ class Player(pygame.sprite.Sprite):
         self.dodge_timer = 0
         self.dodging = False
         self.dodge_dir = pygame.math.Vector2(0, 0)
-        self.dodge_speed = 5
+        self.dodge_speed = 30
         self.dodge_lag = 0.3
-        self.dodge_lag_timer = 0
+        self.dodge_lag_timer = 0.3
         self.locked = False
+        self.dodge_regen_time = 2
+        self.dodge_regen_timer = 0
 
     def get_pos(self) -> pygame.math.Vector2:
         return pygame.math.Vector2(self.rect.x, self.rect.y)
@@ -48,10 +52,12 @@ class Player(pygame.sprite.Sprite):
         return pygame.math.Vector2(self.rect.centerx, self.rect.centery)
 
     def move(self):
-        if self.dodge_lag_timer >= self.dodge_lag:
+        if self.dodge_lag_timer < self.dodge_lag:
+            return
+        if self.dodging:
             return
 
-        pressed = pygame.key.get_pressed()
+        pressed = Systems.input.get_pressed()
 
         for vec in (self.controls[k] for k in self.controls if pressed[k]):
 
@@ -60,9 +66,8 @@ class Player(pygame.sprite.Sprite):
         if self.velocity.magnitude() > self.maxvelocity:
             self.velocity = self.velocity.normalize() * self.maxvelocity
 
-
+    def handle_physics(self):
         self.velocity *= self.friction
-
 
         self.rect.x += self.velocity[0]
         self.rect.y += self.velocity[1]
@@ -94,7 +99,7 @@ class Player(pygame.sprite.Sprite):
 
 
     def thrower(self, dt):
-        keys = pygame.key.get_pressed()
+        keys = Systems.input.get_pressed()
         if not keys[pygame.K_f]:
             return
         for _ in range(0,3):
@@ -109,6 +114,7 @@ class Player(pygame.sprite.Sprite):
         self.shootbomb(dt)
         self.thrower(dt)
         self.dodge(dt)
+        self.handle_physics()
 
     def recoil(self):
 
@@ -127,11 +133,32 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.recoilvelocity[1]
 
     def dodge(self, dt):
+        if not self.dodging and not self.locked and self.remaining_dodges < self.max_dodges:
+            self.dodge_regen_timer += dt
+            if self.dodge_regen_timer >= self.dodge_regen_time:
+                self.remaining_dodges += 1
+                self.dodge_regen_timer = 0
+
         if self.dodging:
-            self.velocity = self.dodge_dir * self.dodge_speed
+            print("dodging", self.dodge_dir)
+            self.velocity = self.dodge_dir.normalize() * self.dodge_speed
             self.dodge_timer += dt
             if self.dodge_timer >= self.dodge_time:
                 self.dodging = False
                 self.velocity = pygame.math.Vector2(0, 0)
                 self.locked = True
             return
+        if self.locked:
+            print("locked")
+            self.dodge_lag_timer += dt
+            if self.velocity.length() > 0:
+                self.locked = False
+        if Systems.input.get_pressed()[pygame.K_LSHIFT] and not self.dodging and self.remaining_dodges > 0:
+            print("dodge")
+            self.dodging = True
+            keys = Systems.input.get_pressed()
+            self.dodge_dir = pygame.math.Vector2((1 if keys[pygame.K_d] else 0) + (-1 if keys[pygame.K_a] else 0),
+                                                 (1 if keys[pygame.K_s] else 0) + (-1 if keys[pygame.K_w] else 0))
+            self.remaining_dodges -= 1
+            self.dodge_timer = 0
+            self.dodge_lag_timer = 0

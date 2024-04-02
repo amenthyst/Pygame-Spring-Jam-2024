@@ -6,6 +6,7 @@ import Objects.particle
 from Enemies.sampleenemy import Enemy
 import images
 from Objects.player import Player
+import Systems.input
 
 pygame.init()
 
@@ -33,6 +34,7 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+    Systems.input.update()
 
     screen.fill("white")
 
