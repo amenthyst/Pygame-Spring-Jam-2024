@@ -9,10 +9,11 @@ from Objects.player import Player
 import Systems.input
 from UI.switchbar import Switchbar
 from UI.background import Background
+from UI.button import Button
 
 pygame.init()
 
-screen = pygame.display.set_mode((1000,600))
+screen = pygame.display.set_mode((1000, 600))
 
 pygame.display.set_caption("Game Jam")
 clock = pygame.time.Clock()
@@ -24,6 +25,7 @@ GAME_MODE = 1
 
 current_mode = 0
 
+
 bulletgrp = pygame.sprite.Group()
 
 enemygrp = pygame.sprite.Group(Enemy((600,300)))
@@ -32,10 +34,21 @@ playergrp = pygame.sprite.GroupSingle(Player(playertuple,(500,500), 1.4, Objects
 
 uigrp = pygame.sprite.Group(Background(playergrp.sprites()[0]), Switchbar(playergrp.sprites()[0], (700,50), 5))
 
+
+def play_game():
+    global current_mode
+    current_mode = GAME_MODE
+
+menugrp = pygame.sprite.Group(Button((1000//2, 600//2), images.rendermenuui(), play_game))
+
+
 run = True
 
+
+
 def run_menu():
-    pass
+    menugrp.update()
+    menugrp.draw(screen)
 
 def run_game():
 

@@ -1,8 +1,10 @@
 import pygame
 import Systems.input as input
 
+
 class Button(pygame.sprite.Sprite):
     def __init__(self, position: tuple[int, int], sprite: pygame.surface.Surface, on_clicked) -> None:
+        super().__init__()
         self.original_image = sprite
         self.image = sprite
         self.rect = self.image.get_rect(center=position)

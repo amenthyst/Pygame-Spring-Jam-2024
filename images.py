@@ -24,3 +24,7 @@ def renderbullets():
 
     return (ice, fire, icebomb, firebomb)
 
+def rendermenuui():
+    play = pygame.image.load("UI/Sprites/play_button.png").convert_alpha()
+    play = pygame.transform.scale(play, (128, 64))
+    return (play)
