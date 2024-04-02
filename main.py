@@ -6,6 +6,7 @@ import Objects.particle
 from Enemies.sampleenemy import Enemy
 import images
 from Objects.player import Player
+import Systems.input
 from UI.switchbar import Switchbar
 from UI.background import Background
 
@@ -31,6 +32,7 @@ uigrp = pygame.sprite.Group(Background(playergrp.sprites()[0]), Switchbar(player
 run = True
 
 while run:
+    Systems.input.update()
 
     dt = clock.tick(60) / 1000
 

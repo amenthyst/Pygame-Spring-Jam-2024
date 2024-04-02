@@ -10,10 +10,9 @@ def renderplayer():
     iceplayer = pygame.image.load("Graphics/icesprite.png").convert_alpha()
     iceplayer = pygame.transform.scale(iceplayer, (75,75))
     return (fireplayer, iceplayer)
+  
 
 def renderbullets():
-
-
     ice = pygame.image.load("Graphics/ice.png").convert_alpha()
     fire = pygame.image.load("Graphics/fire.png").convert_alpha()
 
