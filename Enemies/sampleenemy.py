@@ -9,5 +9,5 @@ class Enemy(pygame.sprite.Sprite, tags.Damageable):
         self.rect = self.image.get_rect(center=self.pos)
 
     def damage(self, amount):
-        print("damaged", amount)
+        amount += 1
 

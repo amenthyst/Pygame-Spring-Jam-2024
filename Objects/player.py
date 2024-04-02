@@ -1,11 +1,16 @@
 import pygame
 import Systems.input
-
+import math
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, playersurf, position, speed, bullet, bomb, particle, bullet_group, enemygrp):
+    def __init__(self, playertuple, position, speed, bullet, bomb, particle, bullet_group, enemygrp):
         super().__init__()
-        self.image = playersurf
+        self.state = "cold"
+
+        self.firesprite = playertuple[0]
+        self.icesprite = playertuple[1]
+
+        self.checktexture()
         self.rect = self.image.get_rect(center=position)
 
         self.velocity = pygame.math.Vector2()
@@ -41,6 +46,8 @@ class Player(pygame.sprite.Sprite):
         self.locked = False
         self.dodge_regen_time = 2
         self.dodge_regen_timer = 0
+
+        self.changing = False
 
     def get_pos(self) -> pygame.math.Vector2:
         return pygame.math.Vector2(self.rect.x, self.rect.y)
@@ -79,7 +86,7 @@ class Player(pygame.sprite.Sprite):
         mouse_pos = pygame.mouse.get_pos()
         bullet_dir = pygame.math.Vector2(mouse_pos) - self.get_centre()
         bullet_dir = bullet_dir.normalize()
-        bullet = self.bullet(self.get_centre(), bullet_dir * self.shoot_force, self.enemygrp)
+        bullet = self.bullet(self.get_centre(), bullet_dir * self.shoot_force, self.enemygrp, self.state)
         self.bulletgrp.add(bullet)
     def shootbomb(self, dt):
         self.bomb_timer += dt * (2 if self.locked else 1)
@@ -91,21 +98,25 @@ class Player(pygame.sprite.Sprite):
         mouse_pos = pygame.mouse.get_pos()
         bombdir = pygame.math.Vector2(mouse_pos) - self.get_centre()
         bombdir = bombdir.normalize()
-        bomb = self.bomb(self.get_centre(), bombdir * self.shoot_force, self.bulletgrp, self.enemygrp)
+        bomb = self.bomb(self.get_centre(), bombdir * self.shoot_force, self.bulletgrp, self.enemygrp, self.state)
         self.bulletgrp.add(bomb)
 
 
     def thrower(self, dt):
         keys = Systems.input.get_pressed()
+
         if not keys[pygame.K_f]:
             return
         for _ in range(0,3):
             particledir = -(pygame.math.Vector2(pygame.mouse.get_pos()) - self.get_centre())
-            particle = self.particle("hot", "cone", self.enemygrp, self.bulletgrp, 5, self.get_centre(), particledir, 300, 0.6, 0.02)
+            particle = self.particle(self.state, "cone", self.enemygrp, self.bulletgrp, 5, self.get_centre(), particledir, 300, 0.6, 0.02)
             self.bulletgrp.add(particle)
 
 
     def update(self, dt):
+        self.checktexture()
+        self.rotimage = pygame.transform.rotate(self.image, self.getangle())
+        self.rotrect = self.rotimage.get_rect(center=tuple(self.get_centre()))
         self.move()
         self.shoot(dt)
         self.shootbomb(dt)
@@ -113,8 +124,10 @@ class Player(pygame.sprite.Sprite):
         self.dodge(dt)
         self.handle_physics()
 
-    def recoil(self):
 
+
+    def recoil(self):
+        # most annoying thing known to man
         particledir = self.get_centre() - pygame.mouse.get_pos()
         self.recoilvelocity += particledir * self.acceleration/20
 
@@ -128,6 +141,7 @@ class Player(pygame.sprite.Sprite):
 
         self.rect.x += self.recoilvelocity[0]
         self.rect.y += self.recoilvelocity[1]
+
 
     def dodge(self, dt):
         dodge_dir = Systems.input.get_vector(pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s)
@@ -160,3 +174,17 @@ class Player(pygame.sprite.Sprite):
             self.remaining_dodges -= 1
             self.dodge_timer = 0
             self.dodge_lag_timer = 0
+
+    def getangle(self):
+        direction = pygame.math.Vector2(pygame.mouse.get_pos()) - self.get_centre()
+        return math.degrees(math.atan2(direction.x, direction.y)) + 180
+
+    def draw(self, screen):
+        screen.blit(self.rotimage, self.rotrect)
+
+    def checktexture(self):
+        if self.state == "hot":
+            self.image = self.firesprite
+        elif self.state == "cold":
+            self.image = self.icesprite
+

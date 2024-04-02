@@ -3,7 +3,7 @@ import random
 from Objects import tags
 class Particle(pygame.sprite.Sprite):
     particles = []
-    MAX_PARTICLES = 600
+    MAX_PARTICLES = 800
 
     def __new__(cls, *args, **kwargs):
         if len(Particle.particles) > Particle.MAX_PARTICLES:
@@ -43,10 +43,6 @@ class Particle(pygame.sprite.Sprite):
         elif self.state == "steam":
             self.color = random.choice(self.steamlist)
 
-
-        self.speed = 100
-
-        self.speed = 10
 
         self.speed = speed
 
@@ -110,7 +106,7 @@ class Particle(pygame.sprite.Sprite):
             if not isinstance(obj, Particle):
                 continue
             if (obj.state == "hot" and self.state == "cold") or (obj.state == "cold" and self.state == "hot"):
-                self.bulletgrp.add(Particle("steam", "ball", self.enemygrp, self.bulletgrp, 0.3, self.pos, None, 150, 20, 0))
+                self.bulletgrp.add(Particle("steam", "ball", self.enemygrp, self.bulletgrp, 0.1, self.pos, None, 150, 20, 0))
                 self.kill()
                 obj.kill()
 
