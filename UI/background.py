@@ -1,8 +1,9 @@
 import pygame
 import images
 import math
+from Objects.player import Player
 class Background(pygame.sprite.Sprite):
-    def __init__(self, player):
+    def __init__(self):
         super().__init__()
         self.ice = pygame.transform.scale(images.renderbullets()[0], (32,32))
         self.fire = pygame.transform.scale(images.renderbullets()[1], (32,32))
@@ -11,7 +12,6 @@ class Background(pygame.sprite.Sprite):
         self.bgrect = self.bg.get_rect(topleft=(0,0))
 
 
-        self.player = player
 
         self.transitionlist = []
 
@@ -27,6 +27,9 @@ class Background(pygame.sprite.Sprite):
 
 
     def transition(self):
+
+        self.player = Player.Instance
+
         self.changing = self.player.changing
 
         self.state = self.player.state

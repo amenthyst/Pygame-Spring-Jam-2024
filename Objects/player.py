@@ -36,7 +36,7 @@ class Player(pygame.sprite.Sprite, tags.Damageable):
         self.bulletgrp = bullet_group
         self.enemygrp = enemygrp
         self.shoot_cooldown = 0.33
-        self.bomb_cooldown = 0.33
+        self.bomb_cooldown = 1.5
         self.bomb_timer = 0
         self.shoot_timer = 0
 
@@ -59,6 +59,9 @@ class Player(pygame.sprite.Sprite, tags.Damageable):
         self.maxhealth = health
         self.size = (75,75)
 
+        self.totaldamage = 0
+
+        self.border = pygame.Rect(0,0,1000,600)
 
     def get_pos(self) -> pygame.math.Vector2:
         return pygame.math.Vector2(self.rect.x, self.rect.y)
@@ -71,10 +74,11 @@ class Player(pygame.sprite.Sprite, tags.Damageable):
         if self.dodging:
             return
 
-        pressed = Systems.input.get_pressed()
 
         dir = Systems.input.get_vector(pygame.K_a, pygame.K_d,
                                        pygame.K_w, pygame.K_s)
+
+        self.rect.clamp_ip(self.border)
         if dir.length() > 0:
             self.velocity += dir.normalize() * self.acceleration
 
@@ -134,7 +138,8 @@ class Player(pygame.sprite.Sprite, tags.Damageable):
         self.thrower(dt)
         self.dodge(dt)
         self.handle_physics()
-
+        if self.changing:
+            self.totaldamage = 0
 
 
     def recoil(self):
@@ -202,6 +207,7 @@ class Player(pygame.sprite.Sprite, tags.Damageable):
     def damage(self, amount: int):
         self.health -= amount
         if self.health <= 0:
+            self.totaldamage = 0
             self.kill()
 
     def healthbar(self, screen):
@@ -209,3 +215,5 @@ class Player(pygame.sprite.Sprite, tags.Damageable):
         ratio = self.health / self.maxhealth
         pygame.draw.rect(screen, "green", (self.rect.x - 1, self.rect.y - 13, self.size[0] * ratio - 4, 6))
 
+    def addtotaldamage(self, amount):
+        self.totaldamage += amount

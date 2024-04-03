@@ -1,9 +1,11 @@
 from Objects import tags
 import pygame
 import images
+from Objects.player import Player
+# base class for enemies
 class Enemy(pygame.sprite.Sprite, tags.Damageable):
 
-    def __init__(self, pos, health, dmg, speed):
+    def __init__(self, pos, health, dmg, speed, state, size):
 
         super().__init__()
         self.pos = pos
@@ -11,7 +13,8 @@ class Enemy(pygame.sprite.Sprite, tags.Damageable):
         self.health = health
         self.dmg = dmg
         self.speed = speed
-        self.size = (100,100)
+        self.size = size
+        self.state = state
         self.image = pygame.transform.scale(images.renderbullets()[0], self.size)
         self.rect = self.image.get_rect(center=self.pos)
 
@@ -19,7 +22,7 @@ class Enemy(pygame.sprite.Sprite, tags.Damageable):
         self.health -= amount
         if self.health <= 0:
             self.kill()
-
+        Player.Instance.addtotaldamage(amount)
     def draw(self, screen):
         screen.blit(self.image, self.rect)
         self.healthbar(screen)

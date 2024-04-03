@@ -9,6 +9,8 @@ from Objects.player import Player
 import Systems.input
 from UI.switchbar import Switchbar
 from UI.background import Background
+from Enemies.spawnenemies import spawnenemies
+from UI.wavecounter import Wavecounter
 
 pygame.init()
 
@@ -21,16 +23,18 @@ playertuple = images.renderplayer()
 
 
 
+
 bulletgrp = pygame.sprite.Group()
 
 
-enemygrp = pygame.sprite.Group(Enemy((600,300), 50, 1, 10))
+enemygrp = pygame.sprite.Group()
 
 playergrp = pygame.sprite.GroupSingle(Player(playertuple,(500,500), 1.4, Objects.bullet.Bullet, Objects.bomb.Bomb, Objects.particle.Particle, bulletgrp, enemygrp, 100))
 
 ship = playergrp.sprites()[0]
 
-uigrp = pygame.sprite.Group(Background(ship), Switchbar(ship, (700,50), 5))
+uigrp = pygame.sprite.Group(Background(),Switchbar((700,50), 5),Wavecounter(enemygrp, 5), )
+
 
 
 run = True

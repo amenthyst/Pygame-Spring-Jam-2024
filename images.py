@@ -28,4 +28,6 @@ def renderenemies():
 
     firebasher = pygame.image.load("Graphics/enemysprites/firebasher.png").convert_alpha()
 
-    return (firebasher)
+    icebasher = pygame.image.load("Graphics/enemysprites/icebasher.png").convert_alpha()
+
+    return (firebasher, icebasher)
