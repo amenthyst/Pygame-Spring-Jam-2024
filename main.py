@@ -33,7 +33,7 @@ playergrp = pygame.sprite.GroupSingle(Player(playertuple,(500,500), 1.4, Objects
 
 ship = playergrp.sprites()[0]
 
-uigrp = pygame.sprite.Group(Background(),Switchbar((700,50), 5),Wavecounter(enemygrp, 5), )
+uigrp = pygame.sprite.Group(Background(),Switchbar((700,50), 5),Wavecounter(enemygrp, 5, bulletgrp))
 
 
 

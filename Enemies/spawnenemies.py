@@ -25,11 +25,11 @@ def patterns(nums: int):
         pattern.append(data)
     return pattern
 
-def spawnenemies(enemygrp: pygame.sprite.Group, nums: int):
+def spawnenemies(enemygrp: pygame.sprite.Group, nums: int, bulletgrp):
     # dont like this but the pos is needed from pattern
     pattern = patterns(nums)
     for item in pattern:
-        enemydict = {"BASHER": Basher(item[1], 5, 1, 20, (30,30), Player.Instance.state)}
+        enemydict = {"BASHER": Basher(item[1], 5, 1, 20, (30,30), Player.Instance.state, bulletgrp)}
         enemygrp.add(enemydict[item[0]])
 
 

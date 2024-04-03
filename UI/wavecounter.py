@@ -2,7 +2,7 @@ import pygame
 from Enemies.spawnenemies import spawnenemies
 class Wavecounter(pygame.sprite.Sprite):
     Instance = None
-    def __init__(self, enemygrp: pygame.sprite.Group, maxwaves):
+    def __init__(self, enemygrp: pygame.sprite.Group, maxwaves, bulletgrp):
         super().__init__()
         # wavecounter singleton
         if Wavecounter.Instance != None:
@@ -12,6 +12,7 @@ class Wavecounter(pygame.sprite.Sprite):
         self.currentwave = 0
         self.maxwaves = maxwaves
         self.wavetimer = 0
+        self.bulletgrp = bulletgrp
 
     def checkwaves(self, dt):
         if len(self.enemygrp.sprites()) != 0:
@@ -21,7 +22,7 @@ class Wavecounter(pygame.sprite.Sprite):
             return
         self.wavetimer = 0
         self.currentwave += 1
-        spawnenemies(self.enemygrp, self.currentwave*3+5)
+        spawnenemies(self.enemygrp, self.currentwave*3+5, self.bulletgrp)
 
     def draw(self, screen):
         font = pygame.font.Font("Graphics/font.otf", 50)
