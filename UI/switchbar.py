@@ -37,18 +37,19 @@ class Switchbar(pygame.sprite.Sprite):
 
     def switch(self, dt):
         self.ratio += Player.Instance.totaldamage / self.damagereq
-        keys = Systems.input.get_pressed()
+
         Player.Instance.totaldamage = 0
         if self.ratio >= 0.95:
             self.ratio = 0.95
-            if keys[pygame.K_q]:
+            if Systems.input.is_key_just_pressed(pygame.K_q):
                 self.ratio = 0
                 if self.player.state == "hot":
                     self.player.state = "cold"
                 elif self.player.state == "cold":
                     self.player.state = "hot"
                 self.player.changing = True
+                Player.Instance.health = 100
 
     def update(self, dt):
-        self.damagereq = Wavecounter.Instance.currentwave * 10 + 1
+        self.damagereq = Wavecounter.Instance.currentwave * 7 + 1
         self.switch(dt)

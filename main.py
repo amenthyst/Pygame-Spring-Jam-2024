@@ -67,7 +67,7 @@ while run:
     playergrp.update(dt)
 
     for obj in playergrp.sprites():
-        obj.draw(screen)
+        obj.draw(screen, dt)
 
 
 

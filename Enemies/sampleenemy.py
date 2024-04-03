@@ -2,10 +2,12 @@ from Objects import tags
 import pygame
 import images
 from Objects.player import Player
+from Objects.particle import Particle
+import math
 # base class for enemies
 class Enemy(pygame.sprite.Sprite, tags.Damageable):
 
-    def __init__(self, pos, health, dmg, speed, state, size):
+    def __init__(self, pos, health, dmg, speed, state, size, bulletgrp):
 
         super().__init__()
         self.pos = pos
@@ -15,11 +17,23 @@ class Enemy(pygame.sprite.Sprite, tags.Damageable):
         self.speed = speed
         self.size = size
         self.state = state
+        self.bulletgrp = bulletgrp
         self.image = pygame.transform.scale(images.renderbullets()[0], self.size)
         self.rect = self.image.get_rect(center=self.pos)
+        self.confuseduration = 0
+        self.confusetimer = 0
+
+        self.confusion = False
+
+        self.originalpos = pygame.math.Vector2(0, 0)
 
     def damage(self, amount):
-        self.health -= amount
+        hitlist = pygame.sprite.spritecollide(self, self.bulletgrp, False)
+        for obj in hitlist:
+            if self.comparison(obj):
+                self.health -= amount * 2
+            else:
+                self.health -= amount
         if self.health <= 0:
             self.kill()
         Player.Instance.addtotaldamage(amount)
@@ -37,3 +51,24 @@ class Enemy(pygame.sprite.Sprite, tags.Damageable):
 
     def update(self,dt):
         pass
+
+    def comparison(self, obj) -> bool:
+        return (obj.state == "hot" and self.state == "cold") or (obj.state == "cold" and self.state == "hot")
+
+    def confuse(self, dt):
+        hitlist = pygame.sprite.spritecollide(self, self.bulletgrp, False)
+        for obj in hitlist:
+            if not isinstance(obj, Particle):
+                continue
+            if obj.state == "steam":
+                self.confusion = True
+                self.confuseduration += 0.1 if self.confuseduration < 5 else 0 # cap to the duration
+
+        if self.confusion:
+            self.confusetimer += dt
+            if self.confusetimer > self.confuseduration:
+                self.confusetimer = 0
+                self.confusion = False
+
+    def getangle(self, direction):
+        return math.degrees(math.atan2(direction.x, direction.y)) - 90

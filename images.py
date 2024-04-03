@@ -30,4 +30,16 @@ def renderenemies():
 
     icebasher = pygame.image.load("Graphics/enemysprites/icebasher.png").convert_alpha()
 
-    return (firebasher, icebasher)
+    coldbullet = pygame.image.load("Graphics/enemysprites/coldenemybullet.png").convert_alpha()
+    coldbullet = pygame.transform.scale(coldbullet, (30, 10))
+
+    firebullet = pygame.image.load("Graphics/enemysprites/firebasher.png").convert_alpha()
+    firebullet = pygame.transform.scale(firebullet, (30, 10))
+
+    fireshooter = pygame.image.load("Graphics/enemysprites/fireshooter.png").convert_alpha()
+
+
+    iceshooter = pygame.image.load("Graphics/enemysprites/iceshooter.png").convert_alpha()
+
+    iceshooter = pygame.transform.scale(iceshooter, (50,35))
+    return (firebasher, icebasher, coldbullet, firebullet, fireshooter, iceshooter)

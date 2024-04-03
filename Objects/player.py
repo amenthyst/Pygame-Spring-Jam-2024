@@ -63,6 +63,11 @@ class Player(pygame.sprite.Sprite, tags.Damageable):
 
         self.border = pygame.Rect(0,0,1000,600)
 
+        self.throwercount = 1
+
+        self.canthrow = True
+
+
     def get_pos(self) -> pygame.math.Vector2:
         return pygame.math.Vector2(self.rect.x, self.rect.y)
     def get_centre(self) -> pygame.math.Vector2:
@@ -118,14 +123,22 @@ class Player(pygame.sprite.Sprite, tags.Damageable):
 
 
     def thrower(self, dt):
-        keys = Systems.input.get_pressed()
 
-        if not keys[pygame.K_f]:
-            return
-        for _ in range(0,3):
-            particledir = -(pygame.math.Vector2(pygame.mouse.get_pos()) - self.get_centre())
-            particle = self.particle(self.state, "cone", self.enemygrp, self.bulletgrp, 5, self.get_centre(), particledir, 200, 0.6, 0.02)
-            self.bulletgrp.add(particle)
+        if Systems.input.is_key_held(pygame.K_f) and self.throwercount > 0 and self.canthrow:
+            for _ in range(0,3):
+                particledir = -(pygame.math.Vector2(pygame.mouse.get_pos()) - self.get_centre())
+                particle = self.particle(self.state, "cone", self.enemygrp, self.bulletgrp, 5, self.get_centre(), particledir, 200, 0.6, 0.02)
+                self.bulletgrp.add(particle)
+                self.throwercount -= dt / 5
+
+            if self.throwercount < 0:
+                self.throwercount = 0
+                self.canthrow = False
+
+        print(self.throwercount)
+
+
+
 
 
     def update(self, dt):
@@ -193,9 +206,10 @@ class Player(pygame.sprite.Sprite, tags.Damageable):
         direction = pygame.math.Vector2(pygame.mouse.get_pos()) - self.get_centre()
         return math.degrees(math.atan2(direction.x, direction.y)) + 180
 
-    def draw(self, screen):
+    def draw(self, screen, dt):
         screen.blit(self.rotimage, self.rotrect)
         self.healthbar(screen)
+        self.cooldownbar(screen, dt)
 
     def checktexture(self):
         if self.state == "hot":
@@ -217,3 +231,28 @@ class Player(pygame.sprite.Sprite, tags.Damageable):
 
     def addtotaldamage(self, amount):
         self.totaldamage += amount
+
+    def heal(self, amount):
+        self.health += amount
+        if self.health > self.maxhealth:
+            self.health = self.maxhealth
+
+    def cooldownbar(self, screen, dt):
+        pygame.draw.rect(screen, "black", (self.rect.x - 3, self.rect.y + 80, self.size[0], 10), 2)
+        pygame.draw.rect(screen, "white", (self.rect.x - 1, self.rect.y + 82, self.size[0] * self.throwercount - 4, 6))
+
+        if not self.canthrow:
+            self.canthrow = False
+            self.throwercount += dt / 3
+            if self.throwercount > 1:
+                self.canthrow = True
+
+
+
+
+
+
+
+
+
+
