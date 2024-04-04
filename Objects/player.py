@@ -50,7 +50,7 @@ class Player(pygame.sprite.Sprite, tags.Damageable):
         self.dodge_lag = 0.3
         self.dodge_lag_timer = 0.3
         self.locked = False
-        self.dodge_regen_time = 2
+        self.dodge_regen_time = 3
         self.dodge_regen_timer = 0
 
         self.changing = False
@@ -69,7 +69,7 @@ class Player(pygame.sprite.Sprite, tags.Damageable):
 
         self.invincibility = False
 
-        self.invincibilitytime = 0.25
+        self.invincibilitytime = 0.1
 
         self.invintimer = 0
 

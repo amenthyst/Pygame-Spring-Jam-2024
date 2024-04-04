@@ -56,7 +56,7 @@ class Shooter(Enemy, pygame.sprite.Sprite):
         if self.shoottimer < self.shootcooldown:
             return
         self.shoottimer = 0
-        self.bulletgrp.add(Enemybullet(self.pos-Player.Instance.get_centre(), self.pos, 5, 5, self.state, self.bulletgrp))
+        self.bulletgrp.add(Enemybullet(self.pos-Player.Instance.get_centre(), self.pos, 5, 8, self.state, self.bulletgrp))
 
 
     def update(self, dt):
