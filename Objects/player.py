@@ -146,12 +146,7 @@ class Player(pygame.sprite.Sprite, tags.Damageable):
 
 
 
-        if not keys[pygame.K_f]:
-            return
-        for _ in range(0,3):
-            particledir = -(pygame.math.Vector2(Systems.input.get_pos()) - self.get_centre())
-            particle = self.particle(self.state, "cone", self.enemygrp, self.bulletgrp, 5, self.get_centre(), particledir, 300, 0.6, 0.02)
-            self.bulletgrp.add(particle)
+
 
 
 
