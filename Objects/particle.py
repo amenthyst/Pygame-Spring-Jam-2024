@@ -72,7 +72,10 @@ class Particle(pygame.sprite.Sprite):
         self.createsurf()
 
     def createsurf(self):
-        self.image = pygame.Surface((6,6)).convert_alpha()
+        if self.state != "steam":
+            self.image = pygame.Surface((6,6)).convert_alpha()
+        else:
+            self.image = pygame.Surface((8,8)).convert_alpha()
         self.image.set_colorkey("black")
         pygame.draw.circle(self.image, self.color, center=(2, 2), radius=8)
         self.rect = self.image.get_rect(center=self.pos)
