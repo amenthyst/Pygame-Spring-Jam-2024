@@ -3,13 +3,16 @@ from sys import exit
 import Objects.bomb
 import Objects.bullet
 import Objects.particle
-from Enemies.sampleenemy import Enemy
 import images
 from Objects.player import Player
 import Systems.input
 from UI.switchbar import Switchbar
 from UI.background import Background
+
+from UI.wavecounter import Wavecounter
+
 from UI.button import Button
+
 
 pygame.init()
 
@@ -26,13 +29,19 @@ GAME_MODE = 1
 current_mode = 0
 
 
+
 bulletgrp = pygame.sprite.Group()
 
-enemygrp = pygame.sprite.Group(Enemy((600,300)))
 
-playergrp = pygame.sprite.GroupSingle(Player(playertuple,(500,500), 1.4, Objects.bullet.Bullet, Objects.bomb.Bomb, Objects.particle.Particle, bulletgrp, enemygrp))
+enemygrp = pygame.sprite.Group()
 
-uigrp = pygame.sprite.Group(Background(playergrp.sprites()[0]), Switchbar(playergrp.sprites()[0], (700,50), 5))
+playergrp = pygame.sprite.GroupSingle(Player(playertuple,(500,500), 1.4, Objects.bullet.Bullet, Objects.bomb.Bomb, Objects.particle.Particle, bulletgrp, enemygrp, 100))
+
+ship = playergrp.sprites()[0]
+
+uigrp = pygame.sprite.Group(Background(),Switchbar((700,50), 5),Wavecounter(enemygrp, 5, bulletgrp))
+
+
 
 
 def play_game():
@@ -59,7 +68,8 @@ def run_game():
 
     bulletgrp.draw(screen)
 
-    enemygrp.draw(screen)
+    for obj in enemygrp.sprites():
+        obj.draw(screen)
 
     enemygrp.update(dt)
 
@@ -70,7 +80,7 @@ def run_game():
     playergrp.update(dt)
 
     for obj in playergrp.sprites():
-        obj.draw(screen)
+        obj.draw(screen, dt)
 
 
 while run:
