@@ -63,7 +63,9 @@ class Enemy(pygame.sprite.Sprite, tags.Damageable):
             if obj.state == "steam":
                 self.confusion = True
                 self.confuseduration += 0.1 if self.confuseduration < 5 else 0 # cap to the duration
-
+            elif obj.state == "shock":
+                self.confusion = True
+                self.confuseduration += 0.5
         if self.confusion:
             self.confusetimer += dt
             if self.confusetimer > self.confuseduration:
@@ -72,3 +74,4 @@ class Enemy(pygame.sprite.Sprite, tags.Damageable):
 
     def getangle(self, direction):
         return math.degrees(math.atan2(direction.x, direction.y)) - 90
+

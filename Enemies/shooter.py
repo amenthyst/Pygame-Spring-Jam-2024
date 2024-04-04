@@ -56,7 +56,7 @@ class Shooter(Enemy, pygame.sprite.Sprite):
         if self.shoottimer < self.shootcooldown:
             return
         self.shoottimer = 0
-        self.bulletgrp.add(Enemybullet(self.pos-Player.Instance.get_centre(), self.pos, 5, 5, self.state))
+        self.bulletgrp.add(Enemybullet(self.pos-Player.Instance.get_centre(), self.pos, 5, 5, self.state, self.bulletgrp))
 
 
     def update(self, dt):
@@ -80,3 +80,5 @@ class Shooter(Enemy, pygame.sprite.Sprite):
         pygame.draw.rect(screen, "black", (self.rotrect.x - 3, self.rotrect.y - 15, self.size[0], 10), 2)
         ratio = self.health / self.maxhealth
         pygame.draw.rect(screen, "green", (self.rotrect.x - 1, self.rotrect.y - 13, self.size[0] * ratio - 4, 6))
+
+

@@ -2,8 +2,9 @@ import pygame
 import images
 import math
 from Objects.player import Player
+from Objects.particle import Particle
 class Enemybullet(pygame.sprite.Sprite):
-    def __init__(self, direction: pygame.math.Vector2, pos, speed, dmg, state):
+    def __init__(self, direction: pygame.math.Vector2, pos, speed, dmg, state, bulletgrp):
         super().__init__()
         self.state = state
         if self.state == "hot":
@@ -16,6 +17,8 @@ class Enemybullet(pygame.sprite.Sprite):
         self.direction = direction
         self.speed = speed
         self.dmg = dmg
+        self.bulletgrp = bulletgrp
+        self.border = pygame.Rect(0,0,1000,600)
 
     def getangle(self, direction):
         return math.degrees(math.atan2(direction.x, direction.y))
@@ -27,6 +30,9 @@ class Enemybullet(pygame.sprite.Sprite):
         self.rect.x += self.velocity.x
         self.rect.y += self.velocity.y
 
+        if self.rect not in self.border:
+            self.kill()
+
 
     def attack(self):
         if self.rect.colliderect(Player.Instance.rect):
@@ -36,4 +42,16 @@ class Enemybullet(pygame.sprite.Sprite):
     def update(self, dt):
         self.move()
         self.attack()
+        self.shock()
+
+    def shock(self):
+        hitlist = pygame.sprite.spritecollide(self, self.bulletgrp, False)
+        for obj in hitlist:
+            if not isinstance(obj, Particle):
+                continue
+            if obj.state == "shock":
+                obj.kill()
+                self.kill()
+
+
 

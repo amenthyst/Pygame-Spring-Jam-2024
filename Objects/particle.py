@@ -3,7 +3,7 @@ import random
 from Objects import tags
 class Particle(pygame.sprite.Sprite):
     particles = []
-    MAX_PARTICLES = 600
+    MAX_PARTICLES = 500
 
     def __new__(cls, *args, **kwargs):
         if len(Particle.particles) > Particle.MAX_PARTICLES:
@@ -19,7 +19,7 @@ class Particle(pygame.sprite.Sprite):
         super().__init__(bulletgrp)
         self.initialize(state, mode, enemygrp, bulletgrp, speed, pos, direction, radius, duration, damage)
 
-    def initialize(self, state, mode, enemygrp: pygame.sprite.Group, bulletgrp: pygame.sprite.Group, speed, pos: tuple, direction: pygame.math.Vector2, radius, duration, damage):
+    def initialize(self, state, mode, enemygrp: pygame.sprite.Group, bulletgrp: pygame.sprite.Group, speed, pos, direction: pygame.math.Vector2, radius, duration, damage):
         self.hotlist = ((255,0,0), (255,128,0), (255,255,0), (253,67,38), (247,77,77))
 
         self.coldlist = ((51,255,255), (0,255,255), (153,204,255), (161,246,238), (104,203,239))
@@ -40,7 +40,7 @@ class Particle(pygame.sprite.Sprite):
             self.color = random.choice(self.hotlist)
         elif self.state == "cold":
             self.color = random.choice(self.coldlist)
-        elif self.state == "steam":
+        elif self.state == "steam" or self.state == "shock":
             self.color = random.choice(self.steamlist)
 
 
@@ -119,3 +119,5 @@ class Particle(pygame.sprite.Sprite):
         self.steam()
         self.move(dt)
         self.attack()
+
+
