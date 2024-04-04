@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bcaf2af2-9cec-4172-95a6-5e66e6e1f2a5" name="Changes" comment="basic button framework">
-      <change afterPath="$PROJECT_DIR$/UI/Sprites/play_button.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/button.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/button.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images.py" beforeDir="false" afterPath="$PROJECT_DIR$/images.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-    </list>
+    <list default="true" id="bcaf2af2-9cec-4172-95a6-5e66e6e1f2a5" name="Changes" comment="basic button framework" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -50,7 +44,7 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main-menu",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "/Users/amenthyst/PycharmProjects/PygameSpringJam/Pygame-Spring-Jam-2024/Graphics",
     "settings.editor.selected.configurable": "Errors"
   }
@@ -73,6 +67,7 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.9" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
