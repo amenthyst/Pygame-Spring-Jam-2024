@@ -1,3 +1,5 @@
+from typing import overload
+
 import pygame
 
 _last_keys: pygame.key.ScancodeWrapper
@@ -40,3 +42,19 @@ def get_vector(neg_x, pos_x, neg_y, pos_y) -> pygame.math.Vector2:
     if keys[pos_y]:
         vector.y += 1
     return vector
+
+
+def get_pos() -> pygame.math.Vector2:
+    return pygame.math.Vector2(pygame.mouse.get_pos())
+
+
+def get_pressed_mouse() -> tuple[bool, bool, bool]:
+    return pygame.mouse.get_pressed()
+
+
+def l_pressed() -> bool:
+    return get_pressed_mouse()[0]
+
+
+def r_pressed() -> bool:
+    return get_pressed_mouse()[1]
