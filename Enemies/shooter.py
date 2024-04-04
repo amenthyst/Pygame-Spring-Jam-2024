@@ -15,7 +15,7 @@ class Shooter(Enemy, pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, self.size)
         self.rect = self.image.get_rect(center=pos)
         self.pos = pygame.math.Vector2(self.rect.x, self.rect.y)
-        self.shootcooldown = random.uniform(1,2)
+        self.shootcooldown = random.uniform(1,3)
         self.shoottimer = 0
         self.moving = True
         self.target = pygame.math.Vector2(random.uniform(200, 800), random.uniform(100, 500))
@@ -64,6 +64,8 @@ class Shooter(Enemy, pygame.sprite.Sprite):
             self.move()
         if not self.confusion:
             self.shoot(dt)
+
+        self.confuse(dt)
 
     def draw(self, screen):
         if self.moving:

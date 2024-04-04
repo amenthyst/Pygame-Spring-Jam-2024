@@ -3,13 +3,11 @@ from sys import exit
 import Objects.bomb
 import Objects.bullet
 import Objects.particle
-from Enemies.sampleenemy import Enemy
 import images
 from Objects.player import Player
 import Systems.input
 from UI.switchbar import Switchbar
 from UI.background import Background
-from Enemies.spawnenemies import spawnenemies
 from UI.wavecounter import Wavecounter
 
 pygame.init()

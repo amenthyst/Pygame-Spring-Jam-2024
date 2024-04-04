@@ -30,7 +30,7 @@ class Wavecounter(pygame.sprite.Sprite):
     def draw(self, screen):
         font = pygame.font.Font("Graphics/font.otf", 50)
         pygame.draw.rect(screen, "black", (355,20, 300,100),4)
-        text = font.render(f"WAVE:{self.currentwave}", False, "black")
+        text = font.render(f"WAVE{self.currentwave}", False, "black")
         screen.blit(text, (370, 40))
 
     def update(self,dt):
